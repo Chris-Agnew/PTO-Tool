@@ -1,3 +1,5 @@
+import firebase from "firebase";
+require("firebase/auth");
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -12,6 +14,11 @@ const firebaseConfig = {
   messagingSenderId: "1096751400437",
   appId: "1:1096751400437:web:a58cde33e940a9dd378cbc",
 };
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+export const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
