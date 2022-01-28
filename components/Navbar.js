@@ -14,7 +14,12 @@ const Navbar = ({ photo }) => {
                   className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300"
                   href="#"
                 >
-                  <Image src={photo} alt="ARV Logo" height={75} width={75} />
+                  {/* <Image
+                    src={`${photo}`}
+                    alt="ARV Logo"
+                    height={75}
+                    width={75}
+                  /> */}
                 </a>
               </Link>
             </div>
