@@ -14,12 +14,7 @@ const Navbar = ({ photo }) => {
                   className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300"
                   href="#"
                 >
-                  {/* <Image
-                    src={`${photo}`}
-                    alt="ARV Logo"
-                    height={75}
-                    width={75}
-                  /> */}
+                  <Image src={Logo} alt="ARV Logo" height={75} width={75} />
                 </a>
               </Link>
             </div>
@@ -48,12 +43,14 @@ const Navbar = ({ photo }) => {
               >
                 Dashboard
               </a>
-              <a
-                href="#"
-                className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
-              >
-                Time Off Request
-              </a>
+              <Link href="/request">
+                <a
+                  href="#"
+                  className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
+                >
+                  Time Off Request
+                </a>
+              </Link>
               <a
                 href="#"
                 className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
@@ -89,18 +86,8 @@ const Navbar = ({ photo }) => {
                 aria-label="toggle profile dropdown"
               >
                 <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                  <Image
-                    src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
-                    className="object-cover w-full h-full"
-                    alt="avatar"
-                    height={50}
-                    width={50}
-                  />
+                  {/* <Image src={photo} height={50} width={50} alt="profile" />a */}
                 </div>
-
-                <h3 className="mx-2 text-sm font-medium text-gray-700 dark:text-gray-200 md:hidden">
-                  Khatab wedaa
-                </h3>
               </button>
             </div>
           </div>
