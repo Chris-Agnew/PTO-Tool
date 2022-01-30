@@ -1,5 +1,3 @@
-import firebase from "firebase";
-require("firebase/auth");
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -14,11 +12,11 @@ const firebaseConfig = {
   messagingSenderId: "1096751400437",
   appId: "1:1096751400437:web:a58cde33e940a9dd378cbc",
 };
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-export const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
+
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
@@ -26,12 +24,55 @@ export const signInWithGoogle = () => {
       const name = result.user.displayName;
       const email = result.user.email;
       const profilePic = result.user.photoURL;
-
-      localStorage.setItem("name", name);
-      localStorage.setItem("email", email);
-      localStorage.setItem("profilePic", profilePic);
     })
     .catch(error => {
       console.log(error);
     });
 };
+
+// const app = firebase.default.initializeApp(firebaseConfig);
+
+// const auth = getAuth(app);
+// const provider = new firebase.GoogleAuthProvider();
+
+// export const signInWithGoogle = () => {
+//   signInWithPopup(auth, provider)
+//     .then(result => {
+//       const name = result.user.displayName;
+//       const email = result.user.email;
+//       const profilePic = result.user.photoURL;
+
+//       localStorage.setItem("name", name);
+//       localStorage.setItem("email", email);
+//       localStorage.setItem("profilePic", profilePic);
+//     })
+//     .catch(error => {
+//       console.log(error);
+//     });
+// };
+
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth;
+// const provider = new auth.GoogleAuthProvider();
+
+// if (!firebase.apps.length) {
+//   firebase.initializeApp(firebaseConfig);
+// } else {
+//   firebase.app(); // if already initialized, use that one
+// }
+
+// export const signInWithGoogle = () => {
+//   signInWithPopup(auth, provider)
+//     .then(result => {
+//       const name = result.user.displayName;
+//       const email = result.user.email;
+//       const profilePic = result.user.photoURL;
+
+//       localStorage.setItem("name", name);
+//       localStorage.setItem("email", email);
+//       localStorage.setItem("profilePic", profilePic);
+//     })
+//     .catch(error => {
+//       console.log(error);
+//     });
+// };
