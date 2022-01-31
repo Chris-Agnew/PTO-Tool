@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "../public/images/arv-logo-white.png";
 
-const Navbar = ({ photo }) => {
+const Navbar = ({ user }) => {
   return (
     <nav className="bg-white shadow dark:bg-gray-800">
       <div className="container px-6 py-4 mx-auto">
@@ -10,10 +10,7 @@ const Navbar = ({ photo }) => {
           <div className="flex items-center justify-between">
             <div className="text-xl font-semibold text-gray-700">
               <Link href="/">
-                <a
-                  className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300"
-                  href="#"
-                >
+                <a className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
                   <Image src={Logo} alt="ARV Logo" height={75} width={75} />
                 </a>
               </Link>
@@ -86,7 +83,14 @@ const Navbar = ({ photo }) => {
                 aria-label="toggle profile dropdown"
               >
                 <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                  {/* <Image src={photo} height={50} width={50} alt="profile" />a */}
+                  {user && (
+                    <Image
+                      src={user.photoURL}
+                      height={50}
+                      width={50}
+                      alt="profile"
+                    />
+                  )}
                 </div>
               </button>
             </div>
