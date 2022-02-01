@@ -17,7 +17,7 @@ const Request = () => {
   return (
     <div>
       <Navbar />
-      <div>
+      <div className="flex justify-center items-center my-10">
         <DatePicker
           selected={startDate}
           onChange={onChange}
