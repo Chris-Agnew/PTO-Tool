@@ -1,104 +1,175 @@
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../public/images/arv-logo-white.png";
+import { Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { googleSignOut } from "./firebase/firebase";
 
-const Navbar = ({ user }) => {
+const navigation = [
+  { name: "Dashboard", href: "/dashboard", current: false },
+  { name: "Time Off Request", href: "/request", current: false },
+  { name: "Edit Time Off", href: "#", current: false },
+  { name: "Calendar", href: "/calendar", current: false },
+];
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export default function Navbar({ user }) {
+  const [current, setCurrent] = useState(false);
+
   return (
-    <nav className="bg-white shadow dark:bg-gray-800">
-      <div className="container px-6 py-4 mx-auto">
-        <div className="md:flex md:items-center md:justify-between">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-semibold text-gray-700">
-              <Link href="/">
-                <a className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
-                  <Image src={Logo} alt="ARV Logo" height={75} width={75} />
-                </a>
-              </Link>
-            </div>
-
-            <div className="flex md:hidden">
-              <button
-                type="button"
-                className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
-                aria-label="toggle menu"
-              >
-                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
-                  <path
-                    fillRule="evenodd"
-                    d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="flex-1 md:flex md:items-center md:justify-between">
-            <div className="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
-              <a
-                href="#"
-                className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
-              >
-                Dashboard
-              </a>
-              <Link href="/request">
-                <a
-                  href="#"
-                  className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
-                >
-                  Time Off Request
-                </a>
-              </Link>
-              <a
-                href="#"
-                className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
-              >
-                Edit Time off
-              </a>
-            </div>
-
-            <div className="flex items-center mt-4 md:mt-0">
-              <button
-                className="hidden mx-4 text-gray-600 transition-colors duration-200 transform md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none"
-                aria-label="show notifications"
-              >
-                <svg
-                  className="w-6 h-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M15 17H20L18.5951 15.5951C18.2141 15.2141 18 14.6973 18 14.1585V11C18 8.38757 16.3304 6.16509 14 5.34142V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V5.34142C7.66962 6.16509 6 8.38757 6 11V14.1585C6 14.6973 5.78595 15.2141 5.40493 15.5951L4 17H9M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M15 17H9"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                className="flex items-center focus:outline-none"
-                aria-label="toggle profile dropdown"
-              >
-                <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                  {user && (
-                    <Image
-                      src={user.photoURL}
-                      height={50}
-                      width={50}
-                      alt="profile"
-                    />
+    <Disclosure as="nav" className="bg-gray-800">
+      {({ open }) => (
+        <>
+          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div className="relative flex items-center justify-between h-16">
+              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                {/* Mobile menu button*/}
+                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <span className="sr-only">Open main menu</span>
+                  {open ? (
+                    <XIcon className="block h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <MenuIcon className="block h-6 w-6" aria-hidden="true" />
                   )}
+                </Disclosure.Button>
+              </div>
+              <div className=" flex items-center justify-center ">
+                <div className=" flex items-center justify-center">
+                  <Link href="/">
+                    <a>
+                      <Image src={Logo} alt="ARV Logo" height={50} width={50} />
+                    </a>
+                  </Link>
                 </div>
-              </button>
+                <div className="hidden sm:block sm:ml-6">
+                  <div className="flex space-x-4 ">
+                    {navigation.map(item => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setCurrent(true)}
+                        className={classNames(
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "px-3 py-2 rounded-md text-sm font-medium"
+                        )}
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <button
+                  type="button"
+                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+
+                {/* Profile dropdown */}
+                <Menu as="div" className="ml-3 relative">
+                  <div>
+                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                      <span className="sr-only">Open user menu</span>
+                      {user && (
+                        <Image
+                          src={user.photoURL}
+                          height={50}
+                          width={50}
+                          alt="profile"
+                          className="rounded-full"
+                        />
+                      )}
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Your Profile
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Settings
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item onClick={googleSignOut}>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Sign out
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
 
-export default Navbar;
+          <Disclosure.Panel className="sm:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navigation.map(item => (
+                <Disclosure.Button
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  className={classNames(
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block px-3 py-2 rounded-md text-base font-medium"
+                  )}
+                  aria-current={item.current ? "page" : undefined}
+                >
+                  {item.name}
+                </Disclosure.Button>
+              ))}
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
+  );
+}
