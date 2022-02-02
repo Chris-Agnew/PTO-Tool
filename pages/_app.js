@@ -5,7 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../components/firebase/firebase";
 
 function MyApp({ Component, pageProps }) {
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   return (
     <div className="font-nunito">
       <Navbar user={user} />
