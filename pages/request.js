@@ -16,7 +16,6 @@ const Request = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="flex justify-center items-center my-10">
         <DatePicker
           selected={startDate}
@@ -27,8 +26,6 @@ const Request = () => {
           inline
         />
       </div>
-
-      <Footer />
     </div>
   );
 };
