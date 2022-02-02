@@ -12,16 +12,15 @@ export default function Home() {
         <Image
           className="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded"
           alt="hero"
-          src="/images/arv-pto.jpg"
+          src="/images/pto.jpg"
           height={600}
           width={600}
         />
         <div className="text-center lg:w-2/3 w-full">
-          <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-            Welcome to the ARV PTO Tool
-          </h1>
-          <p className="mb-8 leading-relaxed">
-            Sign in Below to add your time off
+          <p className="mb-20 leading-relaxed">
+            Welcome to the ARV PTO Tool. Please sign in below to add your time
+            off. Please refer to the PTO policy for more information. if you
+            have an issues with the tool please contact Chris A.
           </p>
           <div className="flex justify-center">
             <GoogleButton onClick={signInWithGoogle} />
