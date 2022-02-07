@@ -10,7 +10,7 @@ import { googleSignOut } from "./firebase/firebase";
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: false },
   { name: "Time Off Request", href: "/request", current: false },
-  { name: "Edit Time Off", href: "#", current: false },
+  { name: "Edit Time Off", href: "/edit", current: false },
   { name: "Calendar", href: "/calendar", current: false },
 ];
 
@@ -19,8 +19,6 @@ function classNames(...classes) {
 }
 
 export default function Navbar({ user }) {
-  const [current, setCurrent] = useState(false);
-
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -52,7 +50,6 @@ export default function Navbar({ user }) {
                       <a
                         key={item.name}
                         href={item.href}
-                        onClick={() => setCurrent(true)}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
