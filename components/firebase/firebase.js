@@ -6,15 +6,7 @@ import {
   setPersistence,
   browserSessionPersistence,
 } from "firebase/auth";
-import {
-  getDocs,
-  getFirestore,
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,33 +21,20 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const auth = getAuth(app);
 const db = getFirestore();
 const provider = new GoogleAuthProvider();
+export { db, auth, provider };
 
 export const signInWithGoogle = () => {
-<<<<<<< HEAD
-  setPersistence(auth, browserSessionPersistence)
-    .then(() => {
-      // Existing and future Auth states are now persisted in the current
-      // session only. Closing the window would clear any existing state even
-      // if a user forgets to sign out.
-      // ...
-      // New sign-in will be persisted with session persistence.
-      signInWithPopup(auth, provider);
-    })
+  // Existing and future Auth states are now persisted in the current
+  // session only. Closing the window would clear any existing state even
+  // if a user forgets to sign out.
+  // ...
+  // New sign-in will be persisted with session persistence.
+  signInWithPopup(auth, provider)
     .then(() => {
       console.log("signed in");
-      window.location.href = "/dashboard";
-=======
-  signInWithPopup(auth, provider)
-    .then(cred => {
-      addDoc(colRef, {
-        name: cred.user.displayName,
-        email: cred.user.email,
-        uid: cred.user.uid,
-      });
->>>>>>> 9f1eddaf91e0d48294745eb7c816a3f454a85503
     })
 
     .catch(error => {
