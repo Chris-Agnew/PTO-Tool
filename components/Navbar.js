@@ -11,7 +11,6 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", current: false },
   { name: "Time Off Request", href: "/request", current: false },
   { name: "Edit Time Off", href: "/edit", current: false },
-  { name: "Calendar", href: "/calendar", current: false },
 ];
 
 function classNames(...classes) {
@@ -101,28 +100,16 @@ export default function Navbar({ user }) {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </a>
+                          <Link href="/profile">
+                            <a
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Profile
+                            </a>
+                          </Link>
                         )}
                       </Menu.Item>
                       <Menu.Item onClick={googleSignOut}>
