@@ -3,14 +3,17 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../components/firebase/firebase";
+import { AuthProvider } from "../components/firebase/Auth";
 
 function MyApp({ Component, pageProps }) {
   const [user] = useAuthState(auth);
   return (
     <div className="font-nunito">
-      <Navbar user={user} />
-      <Component {...pageProps} />
-      <Footer />
+      <AuthProvider>
+        <Navbar user={user} />
+        <Component {...pageProps} />
+        <Footer />
+      </AuthProvider>
     </div>
   );
 }
