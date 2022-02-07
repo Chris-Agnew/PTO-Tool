@@ -37,6 +37,7 @@ export const signInWithGoogle = () => {
     })
     .then(() => {
       console.log("signed in");
+      window.location.href = "/dashboard";
     })
     .catch(error => {
       // Handle Errors here.
