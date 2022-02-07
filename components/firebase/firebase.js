@@ -6,7 +6,15 @@ import {
   setPersistence,
   browserSessionPersistence,
 } from "firebase/auth";
-import { getDocs, getFirestore, collection } from "firebase/firestore";
+import {
+  getDocs,
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,6 +34,7 @@ const db = getFirestore();
 const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
+<<<<<<< HEAD
   setPersistence(auth, browserSessionPersistence)
     .then(() => {
       // Existing and future Auth states are now persisted in the current
@@ -38,7 +47,17 @@ export const signInWithGoogle = () => {
     .then(() => {
       console.log("signed in");
       window.location.href = "/dashboard";
+=======
+  signInWithPopup(auth, provider)
+    .then(cred => {
+      addDoc(colRef, {
+        name: cred.user.displayName,
+        email: cred.user.email,
+        uid: cred.user.uid,
+      });
+>>>>>>> 9f1eddaf91e0d48294745eb7c816a3f454a85503
     })
+
     .catch(error => {
       // Handle Errors here.
       const errorCode = error.code;
@@ -50,11 +69,4 @@ export const googleSignOut = () => {
   auth.signOut();
 };
 
-const colRef = collection(db, "users");
-getDocs(colRef).then(snapshot => {
-  let users = [];
-  snapshot.docs.forEach(doc => {
-    users.push({ ...doc.data(), id: doc.id });
-  });
-  console.log(users);
-});
+export const colRef = collection(db, "users");

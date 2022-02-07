@@ -1,8 +1,19 @@
 import { signInWithGoogle } from "../components/firebase/firebase";
 import Image from "next/image";
 import GoogleButton from "react-google-button";
+import { colRef } from "../components/firebase/firebase";
+import { getDocs } from "firebase/firestore";
+import { useState } from "react";
 
 export default function Home() {
+  getDocs(colRef).then(snapshot => {
+    let users = [];
+    snapshot.docs.forEach(doc => {
+      users.push({ ...doc.data(), id: doc.id });
+    });
+    console.log(users);
+  });
+
   return (
     <section className="text-gray-600 body-font">
       <div className="container mx-auto flex px-5 py-10 items-center justify-center flex-col">
@@ -22,6 +33,13 @@ export default function Home() {
           <div className="flex justify-center items-center">
             <GoogleButton onClick={signInWithGoogle} />
           </div>
+          {/* {users.map(user => (
+            <div key={user.id}>
+              <p>{user.name}</p>
+              <p>{user.email}</p>
+              <p>{user.id}</p>
+            </div>
+          ))} */}
         </div>
       </div>
     </section>
