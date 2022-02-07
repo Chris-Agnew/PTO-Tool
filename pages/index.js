@@ -1,14 +1,11 @@
-import {
-  signInWithGoogle,
-  googleSignOut,
-} from "../components/firebase/firebase";
+import { signInWithGoogle } from "../components/firebase/firebase";
 import Image from "next/image";
 import GoogleButton from "react-google-button";
 
 export default function Home() {
   return (
     <section className="text-gray-600 body-font">
-      <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+      <div className="container mx-auto flex px-5 py-10 items-center justify-center flex-col">
         <Image
           className="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded"
           alt="hero"
@@ -22,7 +19,7 @@ export default function Home() {
             off. Please refer to the PTO policy for more information. if you
             have an issues with the tool please contact Chris A.
           </p>
-          <div className="flex justify-center">
+          <div className="flex justify-center items-center">
             <GoogleButton onClick={signInWithGoogle} />
           </div>
         </div>
