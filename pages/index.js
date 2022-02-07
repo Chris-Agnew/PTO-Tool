@@ -3,7 +3,6 @@ import Image from "next/image";
 import GoogleButton from "react-google-button";
 import { colRef } from "../components/firebase/firebase";
 import { getDocs } from "firebase/firestore";
-import { useState } from "react";
 
 export default function Home() {
   getDocs(colRef).then(snapshot => {
