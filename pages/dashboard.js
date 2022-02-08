@@ -1,6 +1,7 @@
 import { useAuth } from "../components/firebase/Auth";
 import DashboardInfo from "../components/dashboard/DashboardInfo";
 import Calendar from "../components/calendar";
+import DaysOff from "../components/DaysOff";
 
 const dashboard = () => {
   return (
@@ -35,6 +36,7 @@ const dashboard = () => {
         </div>
       </div>
       <Calendar />
+      <DaysOff />
     </section>
   );
 };
