@@ -1,16 +1,9 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  setPersistence,
-  browserSessionPersistence,
-} from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore, collection } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { useRouter } from "next/router";
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCC2j4lpDYOEZMwIAsD6sWcWj9ziZr3xl0",
   authDomain: "arv-pto.firebaseapp.com",
@@ -27,15 +20,8 @@ const provider = new GoogleAuthProvider();
 export { db, auth, provider };
 
 export const signInWithGoogle = () => {
-  // Existing and future Auth states are now persisted in the current
-  // session only. Closing the window would clear any existing state even
-  // if a user forgets to sign out.
-  // ...
-  // New sign-in will be persisted with session persistence.
   signInWithPopup(auth, provider)
-    .then(() => {
-      console.log("signed in");
-    })
+    .then(() => {})
 
     .catch(error => {
       // Handle Errors here.
