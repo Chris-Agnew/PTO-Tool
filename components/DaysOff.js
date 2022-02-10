@@ -1,42 +1,15 @@
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  Timestamp,
-} from "firebase/firestore";
-import { db } from "./firebase/firebase";
-import { useState, useEffect } from "react";
-
-const DaysOff = () => {
-  const [days, setDays] = useState([]);
-
-  useEffect(() => {
-    const collectionRef = collection(db, "days");
-    const q = query(collectionRef, orderBy("name", "desc"));
-
-    const unsubscribe = onSnapshot(q, querySnapshot => {
-      setDays([
-        querySnapshot.docs.map(doc => ({
-          ...doc.data(),
-          id: doc.id,
-          timestamp: doc.data().Timestamp?.toDate().getTime(),
-        })),
-      ]);
-    });
-    return unsubscribe;
-  }, []);
+const DaysOff = ({ days }) => {
   console.log(days);
+
   return (
-    <div>
-      {days.map(day => (
-        <div key={day.id}>
-          <p>{day.name}</p>
-          <p>{day.day}</p>
-          <p>{day.id}</p>
-        </div>
-      ))}
-    </div>
+    days &&
+    days.map((day, idx) => (
+      <div key={idx} className="flex justify-center items-center">
+        <p className="px-5">Name: {day.name}</p>
+        <p className="px-5">Start Date: {day.startDate}</p>
+        <p className="px-5">End Date: {day.endDate}</p>
+      </div>
+    ))
   );
 };
 
