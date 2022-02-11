@@ -1,6 +1,5 @@
 import DashboardInfo from "../components/dashboard/DashboardInfo";
 import Calendar from "../components/calendar";
-import DaysOff from "../components/DaysOff";
 import { useState, useEffect } from "react";
 import {
   collection,
@@ -10,6 +9,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../components/firebase/firebase";
+import Table from "../components/dashboard/table/Table";
 
 const Dashboard = () => {
   const [days, setDays] = useState([]);
@@ -61,7 +61,7 @@ const Dashboard = () => {
         </div>
       </div>
       <Calendar />
-      <DaysOff days={days} />
+      <Table days={days} />
     </section>
   );
 };
