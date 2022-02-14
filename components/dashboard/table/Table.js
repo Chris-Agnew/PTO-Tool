@@ -1,6 +1,14 @@
 import Image from "next/image";
+import { handleDelete } from "../../../pages/request";
+import { format } from "date-fns";
 
 const Table = ({ days }) => {
+  console.log(days);
+
+  const formatDate = date => {
+    return format(new Date(date), "MM-dd-yyyy h:mm a");
+  };
+
   return (
     /* This example requires Tailwind CSS v2.0+ */
 
@@ -55,17 +63,16 @@ const Table = ({ days }) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {day.startDate}
+                        {formatDate(day.startDate)} to {formatDate(day.endDate)}
                       </div>
-                      <div className="text-sm text-gray-500">{day.endDate}</div>
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
+                        onClick={() => handleDelete(day.id)}
+                        className="text-indigo-600 hover:text-indigo-900 cursor-pointer"
                       >
-                        Edit
+                        Delete
                       </a>
                     </td>
                   </tr>

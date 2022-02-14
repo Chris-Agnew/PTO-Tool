@@ -7,15 +7,20 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
+  where,
 } from "firebase/firestore";
 import { db } from "../components/firebase/firebase";
 import Table from "../components/dashboard/table/Table";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../components/firebase/firebase";
 
 const Dashboard = () => {
   const [days, setDays] = useState([]);
+  const [user] = useAuthState(auth);
   useEffect(() => {
     const collectionRef = collection(db, "days");
-    const q = query(collectionRef, orderBy("name", "desc"));
+    const q = query(collectionRef, where("uid", "==", user.uid));
+    // const qAll = query(collectionRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
       setDays(
@@ -26,8 +31,9 @@ const Dashboard = () => {
         }))
       );
     });
+    console.log("time off has been added");
     return unsubscribe;
-  }, []);
+  }, [user.uid]);
 
   return (
     <section className="text-gray-600 body-font">
