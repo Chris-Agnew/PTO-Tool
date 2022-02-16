@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore, collection } from "firebase/firestore";
-import { useRouter } from "next/router";
 
 // Firebase configuration
 const firebaseConfig = {

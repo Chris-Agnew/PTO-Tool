@@ -2,7 +2,6 @@ import { useAuth } from "../firebase/Auth";
 
 const DashboardInfo = () => {
   const { currentUser }: any = useAuth();
-  console.log(currentUser);
 
   return (
     <div className="my-24">
