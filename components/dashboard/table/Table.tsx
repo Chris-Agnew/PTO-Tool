@@ -3,15 +3,22 @@ import { handleDelete } from "../../../pages/request";
 import { format } from "date-fns";
 
 const Table = ({ days }) => {
-  console.log(days);
-
-  const formatDate = date => {
+  const formatDate = (date: string | number | Date) => {
     return format(new Date(date), "MM-dd-yyyy h:mm a");
   };
 
-  return (
-    /* This example requires Tailwind CSS v2.0+ */
+  interface day {
+    email: string;
+    endDate: string;
+    id: string;
+    image: string;
+    name: string;
+    startDate: string;
+    timestamp: object;
+    uid: string;
+  }
 
+  return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -38,7 +45,7 @@ const Table = ({ days }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {days.map(day => (
+                {days.map((day: day) => (
                   <tr key={day.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">

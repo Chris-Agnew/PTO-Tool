@@ -4,7 +4,7 @@ import GoogleButton from "react-google-button";
 import { colRef } from "../components/firebase/firebase";
 import { getDocs } from "firebase/firestore";
 
-export default function Home() {
+export default function Home(): JSX.Element {
   getDocs(colRef).then(snapshot => {
     let users = [];
     snapshot.docs.forEach(doc => {
@@ -32,13 +32,6 @@ export default function Home() {
           <div className="flex justify-center items-center">
             <GoogleButton onClick={signInWithGoogle} />
           </div>
-          {/* {users.map(user => (
-            <div key={user.id}>
-              <p>{user.name}</p>
-              <p>{user.email}</p>
-              <p>{user.id}</p>
-            </div>
-          ))} */}
         </div>
       </div>
     </section>

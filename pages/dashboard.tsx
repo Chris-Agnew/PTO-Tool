@@ -1,20 +1,19 @@
 import DashboardInfo from "../components/dashboard/DashboardInfo";
-import Calendar from "../components/calendar";
+import Calendar from "../components/Calendar";
 import { useState, useEffect } from "react";
 import {
   collection,
   query,
-  orderBy,
   onSnapshot,
   serverTimestamp,
   where,
 } from "firebase/firestore";
-import { db } from "../components/firebase/firebase";
 import Table from "../components/dashboard/table/Table";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../components/firebase/firebase";
+import { auth, db } from "../components/firebase/firebase";
+import { NextPage } from "next";
 
-const Dashboard = () => {
+const Dashboard: NextPage = () => {
   const [days, setDays] = useState([]);
   const [user] = useAuthState(auth);
   useEffect(() => {

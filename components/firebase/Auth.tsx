@@ -4,13 +4,10 @@ import { getAuth } from "firebase/auth";
 import GoogleButton from "react-google-button";
 import { signInWithGoogle } from "./firebase";
 import Loading from "./Loading";
-import { useRouter } from "next/router";
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const router = useRouter();
 
   useEffect(() => {
     const auth = getAuth();

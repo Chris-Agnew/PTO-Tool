@@ -18,6 +18,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar({ user }) {
+  console.log(user);
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
