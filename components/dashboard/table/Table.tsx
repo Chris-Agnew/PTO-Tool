@@ -2,21 +2,38 @@ import Image from "next/image";
 import { handleDelete } from "../../../pages/request";
 import { format } from "date-fns";
 
-const Table = ({ days }) => {
-  const formatDate = (date: string | number | Date) => {
-    return format(new Date(date), "MM-dd-yyyy h:mm a");
-  };
-
-  interface day {
+type arrayDay = [
+  days: {
     email: string;
     endDate: string;
     id: string;
     image: string;
     name: string;
     startDate: string;
-    timestamp: object;
+    timestamp: any;
     uid: string;
   }
+];
+export interface day {
+  days: [
+    {
+      email: string;
+      endDate: string;
+      id: string;
+      image: string;
+      name: string;
+      startDate: string;
+      timestamp: any;
+      uid: string;
+    }
+  ];
+}
+
+const Table = ({ days }: day) => {
+  console.log(days);
+  const formatDate = (date: string | number | Date) => {
+    return format(new Date(date), "MM-dd-yyyy h:mm a");
+  };
 
   return (
     <div className="flex flex-col">
@@ -45,7 +62,7 @@ const Table = ({ days }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {days.map((day: day) => (
+                {days.map(day => (
                   <tr key={day.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
