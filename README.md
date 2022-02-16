@@ -7,6 +7,7 @@
 
 ## Tech Stack
 
+- [TypeScript](https://www.typescriptlang.org/)
 - [Next.js](https://nextjs.org/)
 - [Tailwind CSS 3.0](https://tailwindcss.com/)
 - [Firebase](https://firebase.google.com/)
