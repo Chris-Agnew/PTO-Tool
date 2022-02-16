@@ -5,7 +5,7 @@ import { auth } from "../components/firebase/firebase";
 import { db } from "../components/firebase/firebase";
 import { format } from "date-fns";
 
-export const handleDelete = async id => {
+export const handleDelete = async (id: string) => {
   const docRef = doc(db, "days", id);
   await deleteDoc(docRef);
 };
@@ -22,10 +22,10 @@ const Request = () => {
 
   const handleSubmit = async () => {
     const collectionRef = collection(db, "days");
-    const name = user.displayName;
-    const image = user.photoURL;
-    const email = user.email;
-    const uid = user.uid;
+    const name = user!.displayName;
+    const image = user!.photoURL;
+    const email = user!.email;
+    const uid = user!.uid;
 
     const payload = { name, uid, image, email, startDate, endDate };
     await addDoc(collectionRef, payload);

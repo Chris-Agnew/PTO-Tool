@@ -6,7 +6,7 @@ import { getDocs } from "firebase/firestore";
 
 export default function Home(): JSX.Element {
   getDocs(colRef).then(snapshot => {
-    let users = [];
+    let users: object[] = [];
     snapshot.docs.forEach(doc => {
       users.push({ ...doc.data(), id: doc.id });
     });

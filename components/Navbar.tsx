@@ -7,17 +7,22 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { googleSignOut } from "./firebase/firebase";
 
-const navigation = [
+type nav = {
+  name: string;
+  href: string;
+  current: boolean;
+};
+
+const navigation: Array<nav> = [
   { name: "Dashboard", href: "/dashboard", current: false },
   { name: "Time Off Request", href: "/request", current: false },
   { name: "Edit Time Off", href: "/edit", current: false },
 ];
-
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navbar({ user }) {
+export default function Navbar({ user }: { user: any }) {
   console.log(user);
   return (
     <Disclosure as="nav" className="bg-gray-800">

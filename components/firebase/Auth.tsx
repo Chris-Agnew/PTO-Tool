@@ -5,8 +5,15 @@ import GoogleButton from "react-google-button";
 import { signInWithGoogle } from "./firebase";
 import Loading from "./Loading";
 
-export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+interface userData {
+  displayName: string;
+  email: string;
+  photoURL: string;
+  uid: string;
+}
+
+export const AuthProvider: React.FC<{}> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -14,11 +14,11 @@ import { auth, db } from "../components/firebase/firebase";
 import { NextPage } from "next";
 
 const Dashboard: NextPage = () => {
-  const [days, setDays] = useState([]);
+  const [days, setDays] = useState<any | null>([]);
   const [user] = useAuthState(auth);
   useEffect(() => {
     const collectionRef = collection(db, "days");
-    const q = query(collectionRef, where("uid", "==", user.uid));
+    const q = query(collectionRef, where("uid", "==", user?.uid));
     // const qAll = query(collectionRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -32,7 +32,7 @@ const Dashboard: NextPage = () => {
     });
     console.log("time off has been added");
     return unsubscribe;
-  }, [user.uid]);
+  }, [user?.uid]);
 
   return (
     <section className="text-gray-600 body-font">
