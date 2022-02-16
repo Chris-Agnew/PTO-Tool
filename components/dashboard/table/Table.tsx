@@ -2,18 +2,6 @@ import Image from "next/image";
 import { handleDelete } from "../../../pages/request";
 import { format } from "date-fns";
 
-type arrayDay = [
-  days: {
-    email: string;
-    endDate: string;
-    id: string;
-    image: string;
-    name: string;
-    startDate: string;
-    timestamp: any;
-    uid: string;
-  }
-];
 export interface day {
   days: [
     {
