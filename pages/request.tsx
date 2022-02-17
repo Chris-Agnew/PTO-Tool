@@ -1,37 +1,37 @@
-import { useState } from "react";
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../components/firebase/firebase";
-import { db } from "../components/firebase/firebase";
-import { format } from "date-fns";
+import { useState } from 'react'
+import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../components/firebase/firebase'
+import { db } from '../components/firebase/firebase'
+import { format } from 'date-fns'
 
 export const handleDelete = async (id: string) => {
-  const docRef = doc(db, "days", id);
-  await deleteDoc(docRef);
-};
+  const docRef = doc(db, 'days', id)
+  await deleteDoc(docRef)
+}
 
 const Request = () => {
   const [startDate, setStartDate] = useState(
-    format(new Date(), "MM-dd-yyyy HH[:]mm")
-  );
+    format(new Date(), 'MM-dd-yyyy HH[:]mm')
+  )
   const [endDate, setEndDate] = useState(
-    format(new Date(), "MM-dd-yyyy HH[:]mm")
-  );
-  const [user] = useAuthState(auth);
-  const [added, setAdded] = useState(false);
+    format(new Date(), 'MM-dd-yyyy HH[:]mm')
+  )
+  const [user] = useAuthState(auth)
+  const [added, setAdded] = useState(false)
 
   const handleSubmit = async () => {
-    const collectionRef = collection(db, "days");
-    const name = user!.displayName;
-    const image = user!.photoURL;
-    const email = user!.email;
-    const uid = user!.uid;
+    const collectionRef = collection(db, 'days')
+    const name = user?.displayName
+    const image = user?.photoURL
+    const email = user?.email
+    const uid = user?.uid
 
-    const payload = { name, uid, image, email, startDate, endDate };
-    await addDoc(collectionRef, payload);
-    setAdded(true);
-    console.log(payload);
-  };
+    const payload = { name, uid, image, email, startDate, endDate }
+    await addDoc(collectionRef, payload)
+    setAdded(true)
+    console.log(payload)
+  }
 
   return (
     <div>
@@ -40,14 +40,14 @@ const Request = () => {
         <input
           type="datetime-local"
           placeholder="start date"
-          onChange={e => setStartDate(e.target.value)}
+          onChange={(e) => setStartDate(e.target.value)}
         />
         <label htmlFor="end Date">End Date</label>
 
         <input
           type="datetime-local"
           placeholder="end date"
-          onChange={e => setEndDate(e.target.value)}
+          onChange={(e) => setEndDate(e.target.value)}
         />
         <button
           type="submit"
@@ -82,7 +82,7 @@ const Request = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Request;
+export default Request
