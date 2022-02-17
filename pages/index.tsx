@@ -1,17 +1,17 @@
-import { signInWithGoogle } from "../components/firebase/firebase";
-import Image from "next/image";
-import GoogleButton from "react-google-button";
-import { colRef } from "../components/firebase/firebase";
-import { getDocs } from "firebase/firestore";
+import { SignInWithGoogle } from '../components/firebase/firebase'
+import Image from 'next/image'
+import GoogleButton from 'react-google-button'
+import { colRef } from '../components/firebase/firebase'
+import { getDocs } from 'firebase/firestore'
 
 export default function Home(): JSX.Element {
-  getDocs(colRef).then(snapshot => {
-    let users: object[] = [];
-    snapshot.docs.forEach(doc => {
-      users.push({ ...doc.data(), id: doc.id });
-    });
-    console.log(users);
-  });
+  getDocs(colRef).then((snapshot) => {
+    let users: object[] = []
+    snapshot.docs.forEach((doc) => {
+      users.push({ ...doc.data(), id: doc.id })
+    })
+    console.log(users)
+  })
 
   return (
     <section className="text-gray-600 body-font">
@@ -30,10 +30,10 @@ export default function Home(): JSX.Element {
             have an issues with the tool please contact Chris A.
           </p>
           <div className="flex justify-center items-center">
-            <GoogleButton onClick={signInWithGoogle} />
+            <GoogleButton onClick={SignInWithGoogle} />
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }
