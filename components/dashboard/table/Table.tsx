@@ -1,27 +1,35 @@
-import Image from "next/image";
-import { handleDelete } from "../../../pages/request";
-import { format } from "date-fns";
+import Image from 'next/image'
+import { format } from 'date-fns'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from '../../firebase/firebase'
+import { deleteDoc, doc } from 'firebase/firestore'
 
 export interface day {
   days: [
     {
-      email: string;
-      endDate: string;
-      id: string;
-      image: string;
-      name: string;
-      startDate: string;
-      timestamp: any;
-      uid: string;
+      email: string
+      endDate: string
+      id: string
+      image: string
+      name: string
+      startDate: string
+      timestamp: any
+      uid: string
     }
-  ];
+  ]
 }
 
 const Table = ({ days }: day) => {
-  console.log(days);
+  const [user] = useAuthState(auth)
+
+  const handleDelete = async (id: string) => {
+    const docRef = doc(db, user!.uid, id)
+    await deleteDoc(docRef)
+  }
+
   const formatDate = (date: string | number | Date) => {
-    return format(new Date(date), "MM-dd-yyyy h:mm a");
-  };
+    return format(new Date(date), 'MM-dd-yyyy h:mm a')
+  }
 
   return (
     <div className="flex flex-col">
@@ -50,7 +58,7 @@ const Table = ({ days }: day) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {days.map(day => (
+                {days.map((day) => (
                   <tr key={day.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -95,7 +103,7 @@ const Table = ({ days }: day) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table

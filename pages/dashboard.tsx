@@ -1,38 +1,40 @@
-import DashboardInfo from "../components/dashboard/DashboardInfo";
-import Calendar from "../components/Calendar";
-import { useState, useEffect } from "react";
+import DashboardInfo from '../components/dashboard/DashboardInfo'
+import Calendar from '../components/Calendar'
+import { useState, useEffect } from 'react'
 import {
   collection,
   query,
   onSnapshot,
   serverTimestamp,
   where,
-} from "firebase/firestore";
-import Table from "../components/dashboard/table/Table";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../components/firebase/firebase";
-import { NextPage } from "next";
+  deleteDoc,
+  doc,
+} from 'firebase/firestore'
+import Table from '../components/dashboard/table/Table'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from '../components/firebase/firebase'
+import { NextPage } from 'next'
 
 const Dashboard: NextPage = () => {
-  const [days, setDays] = useState<any | null>([]);
-  const [user] = useAuthState(auth);
+  const [days, setDays] = useState<any | null>([])
+  const [user] = useAuthState(auth)
   useEffect(() => {
-    const collectionRef = collection(db, "days");
-    const q = query(collectionRef, where("uid", "==", user?.uid));
+    const collectionRef = collection(db, user!.uid)
+    const q = query(collectionRef, where('uid', '==', user!.uid))
     // const qAll = query(collectionRef, orderBy("createdAt", "desc"));
 
-    const unsubscribe = onSnapshot(q, querySnapshot => {
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       setDays(
-        querySnapshot.docs.map(doc => ({
+        querySnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
           timestamp: serverTimestamp(),
         }))
-      );
-    });
-    console.log("time off has been added");
-    return unsubscribe;
-  }, [user?.uid]);
+      )
+    })
+    console.log('time off has been added')
+    return unsubscribe
+  }, [user])
 
   return (
     <section className="text-gray-600 body-font">
@@ -68,7 +70,7 @@ const Dashboard: NextPage = () => {
       <Calendar />
       <Table days={days} />
     </section>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

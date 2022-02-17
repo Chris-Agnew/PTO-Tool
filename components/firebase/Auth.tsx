@@ -2,13 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 const AuthContext = createContext({})
 import { getAuth } from 'firebase/auth'
 import GoogleButton from 'react-google-button'
-<<<<<<< HEAD
 import { SignInWithGoogle } from './firebase'
-import Loading from './Loading'
-
-export const AuthProvider: React.FC<{}> = ({ children }) => {
-=======
-import { signInWithGoogle } from './firebase'
 import Loading from './Loading'
 
 interface userData {
@@ -18,8 +12,7 @@ interface userData {
   uid: string
 }
 
-export const AuthProvider: React.FC<userData> = ({ children }) => {
->>>>>>> 9e864a03a14ec341a58f9e6dbf43ad9c551bc6e8
+export const AuthProvider: React.FC<{}> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
 
