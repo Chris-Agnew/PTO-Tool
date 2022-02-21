@@ -1,8 +1,16 @@
 import Image from 'next/image'
-import { format } from 'date-fns'
+import {
+  format,
+  formatDistance,
+  formatDistanceToNow,
+  formatDuration,
+  subHours,
+  getUnixTime,
+} from 'date-fns'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../../firebase/firebase'
-import { deleteDoc, doc } from 'firebase/firestore'
+import { deleteDoc, doc, setDoc } from 'firebase/firestore'
+import { useState } from 'react'
 
 export interface day {
   days: [
@@ -25,6 +33,12 @@ const Table = ({ days }: day) => {
   const handleDelete = async (id: string) => {
     const docRef = doc(db, user!.uid, id)
     await deleteDoc(docRef)
+  }
+
+  const handleEdit = async (id: string) => {
+    const docRef = doc(db, user!.uid, id)
+    const payload = {}
+    setDoc(docRef, payload)
   }
 
   const formatDate = (date: string | number | Date) => {
@@ -83,11 +97,27 @@ const Table = ({ days }: day) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {formatDate(day.startDate)} to {formatDate(day.endDate)}
+                        {formatDate(day.startDate)} - {formatDate(day.endDate)}
                       </div>
+                      <div>
+                        {`For ${formatDistance(
+                          new Date(day.startDate),
+                          new Date(day.endDate)
+                        )}`}
+                      </div>
+                      <div>
+                        {`In ${formatDistanceToNow(new Date(day.startDate))}`}
+                      </div>
+                      {/* <div>{() => timeOff(distance)}</div> */}
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <a
+                        onClick={() => handleDelete(day.id)}
+                        className="text-indigo-600 hover:text-indigo-900 cursor-pointer px-3"
+                      >
+                        Edit
+                      </a>
                       <a
                         onClick={() => handleDelete(day.id)}
                         className="text-indigo-600 hover:text-indigo-900 cursor-pointer"
