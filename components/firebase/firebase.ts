@@ -27,10 +27,8 @@ export { db, auth, provider }
 
 export const SignInWithGoogle = async () => {
   signInWithPopup(auth, provider).then((cred) => {
-    let craftblock = prompt('Craftblock?')
     setDoc(doc(db, 'users', cred.user.uid), {
       uid: cred.user.uid,
-      craftblock: craftblock,
     }).catch((error) => {
       console.log(error)
     })
@@ -41,4 +39,4 @@ export const googleSignOut = () => {
   auth.signOut()
 }
 
-export const colRef = collection(db, 'users')
+export const colRef = collection(db, 'days')

@@ -9,7 +9,7 @@ import {
 } from 'date-fns'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../../firebase/firebase'
-import { deleteDoc, doc, setDoc } from 'firebase/firestore'
+import { deleteDoc, doc } from 'firebase/firestore'
 import { useState } from 'react'
 
 export interface day {
@@ -31,14 +31,8 @@ const Table = ({ days }: day) => {
   const [user] = useAuthState(auth)
 
   const handleDelete = async (id: string) => {
-    const docRef = doc(db, user!.uid, id)
+    const docRef = doc(db, 'days', id)
     await deleteDoc(docRef)
-  }
-
-  const handleEdit = async (id: string) => {
-    const docRef = doc(db, user!.uid, id)
-    const payload = {}
-    setDoc(docRef, payload)
   }
 
   const formatDate = (date: string | number | Date) => {

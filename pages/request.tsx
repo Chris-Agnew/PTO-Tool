@@ -16,7 +16,7 @@ const Request = () => {
   const [added, setAdded] = useState(false)
 
   const handleSubmit = async () => {
-    const collectionRef = collection(db, user!.uid)
+    const collectionRef = collection(db, 'days')
     const name = user?.displayName
     const image = user?.photoURL
     const email = user?.email

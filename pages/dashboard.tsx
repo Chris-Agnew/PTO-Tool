@@ -9,32 +9,59 @@ import {
   where,
   deleteDoc,
   doc,
+  getDocs,
 } from 'firebase/firestore'
 import Table from '../components/dashboard/table/Table'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth, db } from '../components/firebase/firebase'
+import { auth, colRef, db } from '../components/firebase/firebase'
 import { NextPage } from 'next'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectDays, setDaysOff } from '../features/days/daysSlice'
 
 const Dashboard: NextPage = () => {
   const [days, setDays] = useState<any | null>([])
   const [user] = useAuthState(auth)
-  useEffect(() => {
-    const collectionRef = collection(db, user!.uid)
-    const q = query(collectionRef, where('uid', '==', user!.uid))
-    // const qAll = query(collectionRef, orderBy("createdAt", "desc"));
+  // useEffect(() => {
+  // const collectionRef = collection(db, user!.uid)
+  // const q = query(collectionRef, where('uid', '==', user!.uid))
+  // const qAll = query(collectionRef, orderBy("createdAt", "desc"));
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      setDays(
-        querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-          timestamp: serverTimestamp(),
-        }))
-      )
+  //   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //     setDays(
+  //       querySnapshot.docs.map((doc) => ({
+  //         ...doc.data(),
+  //         id: doc.id,
+  //         timestamp: serverTimestamp(),
+  //       }))
+  //     )
+  //   })
+  //   console.log('time off has been added')
+  //   return unsubscribe
+  // }, [user])
+
+  // getDocs(colRef).then((snapshot) => {
+  //   let users: object[] = []
+  //   snapshot.docs.forEach((doc) => {
+  //     users.push({ ...doc.data(), id: doc.id })
+  //   })
+  //   console.log(users)
+  // })
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    getDocs(colRef).then((snapshot: any) => {
+      let days = snapshot.docs.map((doc: any) => {
+        return { id: doc.id, ...doc.data() }
+      })
+      console.log(days)
+      dispatch(setDaysOff(days))
     })
-    console.log('time off has been added')
-    return unsubscribe
-  }, [user])
+  }, [dispatch])
+  console.log()
+
+  const daysRedux = useSelector(selectDays)
+  console.log(daysRedux)
 
   return (
     <section className="text-gray-600 body-font">
@@ -68,7 +95,11 @@ const Dashboard: NextPage = () => {
         </div>
       </div>
       <Calendar />
-      <Table days={days} />
+      <Table days={daysRedux} />
+      {daysRedux &&
+        daysRedux.map((day: any) => {
+          return <div key={day.id}>{day.name}</div>
+        })}
     </section>
   )
 }
