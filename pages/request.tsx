@@ -1,17 +1,20 @@
 import { useState } from 'react'
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  Timestamp,
+} from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../components/firebase/firebase'
 import { db } from '../components/firebase/firebase'
 import { format } from 'date-fns'
+import { totalTime, timeBetween } from '../components/dashboard/DashboardInfo'
 
 const Request = () => {
-  const [startDate, setStartDate] = useState(
-    format(new Date(), 'MM-dd-yyyy HH[:]mm')
-  )
-  const [endDate, setEndDate] = useState(
-    format(new Date(), 'MM-dd-yyyy HH[:]mm')
-  )
+  const [startDate, setStartDate] = useState<any>()
+  const [endDate, setEndDate] = useState<any>()
   const [user] = useAuthState(auth)
   const [added, setAdded] = useState(false)
 
@@ -21,8 +24,10 @@ const Request = () => {
     const image = user?.photoURL
     const email = user?.email
     const uid = user?.uid
+    const time = timeBetween(startDate, endDate)
+    const total = totalTime(time)
 
-    const payload = { name, image, email, startDate, endDate, uid }
+    const payload = { name, image, email, startDate, endDate, uid, total }
     await addDoc(collectionRef, payload)
     setAdded(true)
     console.log(payload)
@@ -35,14 +40,18 @@ const Request = () => {
         <input
           type="datetime-local"
           placeholder="start date"
-          onChange={(e) => setStartDate(e.target.value)}
+          onChange={(e) =>
+            setStartDate(Timestamp.fromDate(new Date(e.target.value)))
+          }
         />
         <label htmlFor="end Date">End Date</label>
 
         <input
           type="datetime-local"
           placeholder="end date"
-          onChange={(e) => setEndDate(e.target.value)}
+          onChange={(e) =>
+            setEndDate(Timestamp.fromDate(new Date(e.target.value)))
+          }
         />
         <button
           type="submit"

@@ -9,34 +9,48 @@ import {
 } from 'date-fns'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../../firebase/firebase'
-import { deleteDoc, doc } from 'firebase/firestore'
+import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
+import { getTime } from 'date-fns'
 
 export interface day {
   days: [
     {
       email: string
-      endDate: string
+      endDate: any
       id: string
       image: string
       name: string
-      startDate: string
+      startDate: any
       timestamp: any
       uid: string
+      total: number
     }
   ]
 }
 
 const Table = ({ days }: day) => {
+  console.log(days)
   const [user] = useAuthState(auth)
+  const [newStartDate, setNewStartDate] = useState<string | Date>()
+  const [newEndDate, setNewEndDate] = useState<string | Date>()
 
   const handleDelete = async (id: string) => {
     const docRef = doc(db, 'days', id)
     await deleteDoc(docRef)
   }
 
+  const handleEdit = async (id: string) => {
+    const docRef = doc(db, 'days', id)
+    const payload = { startDate: newStartDate, endDate: newEndDate }
+    setDoc(docRef, payload)
+  }
+
   const formatDate = (date: string | number | Date) => {
     return format(new Date(date), 'MM-dd-yyyy h:mm a')
+  }
+  const formatTimestamp = (timestamp: Date) => {
+    return getTime(timestamp)
   }
 
   return (
@@ -91,23 +105,25 @@ const Table = ({ days }: day) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {formatDate(day.startDate)} - {formatDate(day.endDate)}
+                        {/* // convert firestore timestamp to time and date */}
+                        {`${formatDate(day.startDate.toDate())} -
+                        ${formatDate(day.endDate.toDate())}`}
                       </div>
                       <div>
                         {`For ${formatDistance(
-                          new Date(day.startDate),
-                          new Date(day.endDate)
+                          day.startDate.toDate(),
+                          day.endDate.toDate()
                         )}`}
                       </div>
                       <div>
-                        {`In ${formatDistanceToNow(new Date(day.startDate))}`}
+                        {`In ${formatDistanceToNow(day.startDate.toDate())}`}
                       </div>
                       {/* <div>{() => timeOff(distance)}</div> */}
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
-                        onClick={() => handleDelete(day.id)}
+                        onClick={() => handleEdit(day.id)}
                         className="text-indigo-600 hover:text-indigo-900 cursor-pointer px-3"
                       >
                         Edit
