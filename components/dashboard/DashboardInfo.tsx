@@ -1,10 +1,25 @@
 import { useAuth } from '../firebase/Auth'
 import { day } from './table/Table'
-import { differenceInSeconds } from 'date-fns'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../components/firebase/firebase'
+import CountUp from 'react-countup'
+
+export interface MyItem {
+  id: string
+  name: string
+  email: string
+  startDate: Date
+  endDate: Date
+  total: number
+  image: string
+  uid: string
+}
+
+export type MyItemList = [MyItem]
 
 // calculate the total time for the day
 
-export const totalTime = (time: any) => {
+export const totalTime = (time: number) => {
   if (time > 8) {
     return 8
   } else {
@@ -12,7 +27,7 @@ export const totalTime = (time: any) => {
   }
 }
 // calculate the time between the start and end date
-export const timeBetween = (start: any, end: any) => {
+export const timeBetween = (start: number, end: number) => {
   const difference = end - start
   return difference / 3600
 }
@@ -20,49 +35,42 @@ export const timeBetween = (start: any, end: any) => {
 const DashboardInfo = ({ days }: day) => {
   const { currentUser }: any = useAuth()
   console.log(days)
+  const [user] = useAuthState(auth)
 
   //sum total time
-  const sumTotalTime = (time: any) => {
-    let total = 0
-    time.forEach((item: any) => {
-      total += totalTime(item)
+  const sumTotalTime = (time: MyItemList) => {
+    let total: number = 0
+    time.forEach((item) => {
+      // if (user?.uid == item.uid) {
+      //   let result = time.reduce((r, d) => r + d.total, 0)
+      //   console.log(item.uid)
+      //   console.log(user.uid)
+      //   return result
+      // }
+
+      user?.uid == item.uid ? (total += item.total) : total
     })
     return total
   }
 
   return (
-    <div className="my-24">
-      <h2 className="text-4xl">Welcome {currentUser.displayName}</h2>
-      <div className="flex flex-wrap -m-4 text-center">
+    <div className="my-10 ">
+      <h2 className="text-4xl my-10">Welcome {currentUser.displayName}</h2>
+      <div className="flex flex-wrap -m-4 text-center justify-center">
         <div className="p-4 sm:w-1/4 w-1/2">
           <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">
-            2.7
+            <CountUp end={sumTotalTime(days)} duration={1} />
           </h2>
-          <p className="leading-relaxed">PTO Days YTD</p>
+          <p className="leading-relaxed">PTO Hours YTD</p>
         </div>
+
         <div className="p-4 sm:w-1/4 w-1/2">
           <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">
-            2.3
+            <CountUp end={sumTotalTime(days) / 8} duration={1} />
           </h2>
-          <p className="leading-relaxed">PTO Days Left</p>
-        </div>
-        <div className="p-4 sm:w-1/4 w-1/2">
-          <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">
-            4
-          </h2>
-          <p className="leading-relaxed">Appointment Hours</p>
-        </div>
-        <div className="p-4 sm:w-1/4 w-1/2">
-          <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">
-            4.5
-          </h2>
-          <p className="leading-relaxed">Other PTO days</p>
+          <p className="leading-relaxed">PTO days YTD</p>
         </div>
       </div>
-
-      {days.map((day) => (
-        <p key={day.id}>{day.total}</p>
-      ))}
     </div>
   )
 }
