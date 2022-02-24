@@ -14,7 +14,7 @@ const Profile = () => {
         alt="profile Photo"
         className="rounded-full "
       />
-      <h2 className="text-4xl py-5 text-left">Welcome {user?.displayName}</h2>
+
       <h2 className="mt-5">Name: {user?.displayName}</h2>
       <h2>Email: {user?.email}</h2>
       <form className="my-10">
