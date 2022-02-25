@@ -4,6 +4,8 @@ import { getAuth } from 'firebase/auth'
 import GoogleButton from 'react-google-button'
 import { SignInWithGoogle } from './firebase'
 import Loading from './Loading'
+import { useRouter } from 'next/router'
+import LogInPage from '../LogInPage'
 
 interface userData {
   displayName: string
@@ -15,6 +17,7 @@ interface userData {
 export const AuthProvider: React.FC<{}> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     const auth = getAuth()
@@ -29,18 +32,14 @@ export const AuthProvider: React.FC<{}> = ({ children }) => {
       setCurrentUser(user)
       setLoading(false)
     })
-  }, [])
+  }, [router])
 
   if (loading) {
     return <Loading />
   }
 
   if (!currentUser) {
-    return (
-      <div className="flex justify-center items-center">
-        <GoogleButton onClick={SignInWithGoogle} />
-      </div>
-    )
+    return <LogInPage />
   } else {
     return (
       <AuthContext.Provider value={{ currentUser }}>
