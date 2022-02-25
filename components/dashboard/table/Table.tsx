@@ -12,6 +12,9 @@ import { auth, db } from '../../firebase/firebase'
 import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
 import { getTime } from 'date-fns'
+import { Modal } from '@nextui-org/react'
+import { Text, Button, Input } from '@nextui-org/react'
+import { timeBetween, totalTime } from '../DashboardInfo'
 
 export interface day {
   days: [
@@ -32,8 +35,8 @@ export interface day {
 const Table = ({ days }: day) => {
   console.log(days)
   const [user] = useAuthState(auth)
-  const [newStartDate, setNewStartDate] = useState<string | Date>()
-  const [newEndDate, setNewEndDate] = useState<string | Date>()
+  const [newStartDate, setNewStartDate] = useState<any>()
+  const [newEndDate, setNewEndDate] = useState<any>()
 
   const handleDelete = async (id: string) => {
     const docRef = doc(db, 'days', id)
@@ -42,15 +45,40 @@ const Table = ({ days }: day) => {
 
   const handleEdit = async (id: string) => {
     const docRef = doc(db, 'days', id)
-    const payload = { startDate: newStartDate, endDate: newEndDate }
+    const name = user?.displayName
+    const image = user?.photoURL
+    const email = user?.email
+    const uid = user?.uid
+    const time = timeBetween(newStartDate, newEndDate)
+    const total = totalTime(time)
+
+    const payload = {
+      startDate: newStartDate,
+      endDate: newEndDate,
+      name,
+      image,
+      email,
+      uid,
+      total,
+    }
     setDoc(docRef, payload)
   }
 
   const formatDate = (date: string | number | Date) => {
     return format(new Date(date), 'MM-dd-yyyy h:mm a')
   }
-  const formatTimestamp = (timestamp: Date) => {
-    return getTime(timestamp)
+
+  const [visible, setVisible] = useState<boolean>(false)
+  const handler = () => setVisible(true)
+  const closeHandler = () => {
+    setVisible(false)
+    console.log('closed')
+  }
+
+  const closeAndUpdate = (id: string) => {
+    handleEdit(id)
+    closeHandler()
+    console.log('closed')
   }
 
   return (
@@ -123,11 +151,59 @@ const Table = ({ days }: day) => {
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <a
-                        onClick={() => handleEdit(day.id)}
+                        onClick={handler}
                         className="text-indigo-600 hover:text-indigo-900 cursor-pointer px-3"
                       >
                         Edit
                       </a>
+                      <Modal
+                        closeButton
+                        preventClose
+                        aria-labelledby="modal-title"
+                        open={visible}
+                        onClose={closeHandler}
+                      >
+                        <Modal.Header>
+                          <Text id="modal-title" size={18}>
+                            Edit your Time
+                          </Text>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <label htmlFor="start Date">New Start Date</label>
+                          <input
+                            type="datetime-local"
+                            placeholder="start date"
+                            onChange={(e) =>
+                              setNewStartDate(
+                                Timestamp.fromDate(new Date(e.target.value))
+                              )
+                            }
+                          />
+                          <label htmlFor="end date">New End Date</label>
+                          <input
+                            type="datetime-local"
+                            placeholder="start date"
+                            onChange={(e) =>
+                              setNewEndDate(
+                                Timestamp.fromDate(new Date(e.target.value))
+                              )
+                            }
+                          />
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            auto
+                            flat
+                            color="error"
+                            onClick={closeHandler}
+                          >
+                            Close
+                          </Button>
+                          <Button auto onClick={() => closeAndUpdate(day.id)}>
+                            Submit
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
                       <a
                         onClick={() => handleDelete(day.id)}
                         className="text-indigo-600 hover:text-indigo-900 cursor-pointer"
