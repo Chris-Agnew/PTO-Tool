@@ -29,6 +29,7 @@ export const SignInWithGoogle = async () => {
   signInWithPopup(auth, provider).then((cred) => {
     setDoc(doc(db, 'users', cred.user.uid), {
       uid: cred.user.uid,
+      displayName: cred.user.displayName,
     }).catch((error) => {
       console.log(error)
     })

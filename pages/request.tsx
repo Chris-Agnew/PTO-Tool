@@ -19,7 +19,9 @@ const Request = () => {
   const [added, setAdded] = useState(false)
 
   const handleSubmit = async () => {
-    const collectionRef = collection(db, 'days')
+    const collectionRef = collection(db, user!.uid)
+    const collectionRefAll = collection(db, 'days')
+
     const name = user?.displayName
     const image = user?.photoURL
     const email = user?.email
@@ -29,6 +31,7 @@ const Request = () => {
 
     const payload = { name, image, email, startDate, endDate, uid, total }
     await addDoc(collectionRef, payload)
+    await addDoc(collectionRefAll, payload)
     setAdded(true)
     console.log(payload)
   }
