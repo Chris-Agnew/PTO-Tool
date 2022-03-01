@@ -41,13 +41,6 @@ const DashboardInfo = ({ days }: day) => {
   const sumTotalTime = (time: MyItemList) => {
     let total: number = 0
     time.forEach((item) => {
-      // if (user?.uid == item.uid) {
-      //   let result = time.reduce((r, d) => r + d.total, 0)
-      //   console.log(item.uid)
-      //   console.log(user.uid)
-      //   return result
-      // }
-
       user?.uid == item.uid ? (total += item.total) : total
     })
     return total
