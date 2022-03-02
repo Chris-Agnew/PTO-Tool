@@ -1,15 +1,40 @@
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../components/firebase/firebase'
 import Image from 'next/image'
-import { collection, doc, setDoc, getDoc } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  query,
+  onSnapshot,
+  serverTimestamp,
+  orderBy,
+  where,
+} from 'firebase/firestore'
 import { db } from '../components/firebase/firebase'
 import { FormEvent, useState } from 'react'
+import { useEffect } from 'react'
 
 const Profile = () => {
   const [user] = useAuthState(auth)
   let [craftblock, setCraftBlock] = useState<any>('')
+  let [craftblockTitle, setCraftblockTitle] = useState<any>('')
 
-  const docRef = doc(db, 'users', user!.uid)
+  // useEffect(() => {
+  //   const collectionRef = collection(db, 'users')
+  //   const docRef = doc(collectionRef, user?.uid)
+  //   getDoc(docRef).then((doc) => {
+  //     setCraftblockTitle(doc.data()?.craftblock)
+  //   })
+  // }, [user?.uid, craftblockTitle])
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'users', user!.uid), (doc) => {
+      setCraftblockTitle(doc.data()?.craftblock)
+    })
+    return unsub
+  }, [user])
 
   const updateCraft = async (e: FormEvent<EventTarget>) => {
     e.preventDefault()
@@ -37,32 +62,34 @@ const Profile = () => {
 
       <h2 className="mt-5">Name: {user?.displayName}</h2>
       <h2>Email: {user?.email}</h2>
-      <h2>Craftblock: {craftblock}</h2>
+      <h2>Craftblock: {craftblockTitle}</h2>
       <form
         className="my-10"
         onChange={(e) => setCraftBlock((e.target as HTMLSelectElement).value)}
       >
         <label htmlFor="craftblocks">Choose a craftblock:</label>
         <select name="craftblocks" id="craftblocks">
-          <option value="suspension">Suspension</option>
-          <option value="pre-cab">Pre-Cab</option>
-          <option value="electrical">Electrical</option>
-          <option value="plumbing">Plumbing</option>
-          <option value="finishing">Finishing</option>
-          <option value="exterior">Exterior</option>
-          <option value="welding">Welding & Fabrication</option>
-          <option value="cnc">CNC</option>
-          <option value="battery">Battery</option>
-          <option value="configuration">Configuration</option>
-          <option value="engineering">Engineering & Design</option>
-          <option value="accounting">
-            Accounting, purchasing, and finance
+          <option value="Suspension">Suspension</option>
+          <option value="Pre-Cab">Pre-Cab</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Finishing">Finishing</option>
+          <option value="Exterior">Exterior</option>
+          <option value="Welding">Welding & Fabrication</option>
+          <option value="CNC">CNC</option>
+          <option value="Battery">Battery</option>
+          <option value="Configuration">Configuration</option>
+          <option value="Engineering & Design">Engineering & Design</option>
+          <option value="Accounting, Purchasing, and Finance">
+            Accounting, Purchasing, and Finance
           </option>
-          <option value="client">Client Service</option>
-          <option value="bbox">B-Box</option>
-          <option value="upholstery">Sewing & upholstery</option>
-          <option value="leadership">Leadership & Tech Support</option>
-          <option value="phones">Front Desk</option>
+          <option value="Client Service">Client Service</option>
+          <option value="B-Box">B-Box</option>
+          <option value="Sewing & Upholstery">Sewing & Upholstery</option>
+          <option value="Leadership and Tech Support">
+            Leadership & Tech Support
+          </option>
+          <option value="Front Desk">Front Desk</option>
         </select>
         <button
           className="p-5 my-5 ml-10 bg-yellow-500 rounded-md"

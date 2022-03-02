@@ -1,13 +1,25 @@
 import Image from 'next/image'
-import { format, formatDistanceToNow } from 'date-fns'
+import { format, formatDistanceToNow, setHours, setMinutes } from 'date-fns'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../../firebase/firebase'
-import { deleteDoc, doc, setDoc, Timestamp, orderBy } from 'firebase/firestore'
+import {
+  deleteDoc,
+  doc,
+  setDoc,
+  Timestamp,
+  orderBy,
+  getDoc,
+  collection,
+} from 'firebase/firestore'
 import { useState } from 'react'
 import { Modal } from '@nextui-org/react'
 import { Text, Button } from '@nextui-org/react'
 import { timeBetween, totalTime } from '../DashboardInfo'
 import { differenceInBusinessDays } from 'date-fns'
+import ReactDatePicker from 'react-datepicker'
+import { isWeekday } from '../../../pages/request'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export interface day {
   days: [
@@ -21,6 +33,7 @@ export interface day {
       timestamp: any
       uid: string
       total: number
+      craftBlock: string
     }
   ]
 }
@@ -165,24 +178,46 @@ const Table = ({ days }: day) => {
                           </Modal.Header>
                           <Modal.Body>
                             <label htmlFor="start Date">New Start Date</label>
-                            <input
-                              type="datetime-local"
-                              placeholder="start date"
-                              onChange={(e) =>
-                                setNewStartDate(
-                                  Timestamp.fromDate(new Date(e.target.value))
-                                )
-                              }
+                            <DatePicker
+                              id="startDate"
+                              selected={newStartDate}
+                              onChange={(date) => setNewStartDate(date)}
+                              showTimeSelect
+                              timeFormat="h:mm aa"
+                              timeIntervals={15}
+                              timeCaption="time"
+                              dateFormat="MM-dd-yy h:mm aa"
+                              minTime={setHours(setMinutes(new Date(), 0), 7)}
+                              maxTime={setHours(setMinutes(new Date(), 0), 17)}
+                              filterDate={isWeekday}
+                              inline
+                              excludeTimes={[
+                                setHours(setMinutes(new Date(), 0), 12),
+                                setHours(setMinutes(new Date(), 15), 12),
+                                setHours(setMinutes(new Date(), 30), 12),
+                                setHours(setMinutes(new Date(), 45), 12),
+                              ]}
                             />
                             <label htmlFor="end date">New End Date</label>
-                            <input
-                              type="datetime-local"
-                              placeholder="start date"
-                              onChange={(e) =>
-                                setNewEndDate(
-                                  Timestamp.fromDate(new Date(e.target.value))
-                                )
-                              }
+                            <DatePicker
+                              id="endDate"
+                              selected={newEndDate}
+                              onChange={(date) => setNewEndDate(date)}
+                              showTimeSelect
+                              timeFormat="h:mm aa"
+                              timeIntervals={15}
+                              timeCaption="time"
+                              dateFormat="MM-dd-yy h:mm aa"
+                              minTime={setHours(setMinutes(new Date(), 0), 7)}
+                              maxTime={setHours(setMinutes(new Date(), 0), 17)}
+                              filterDate={isWeekday}
+                              inline
+                              excludeTimes={[
+                                setHours(setMinutes(new Date(), 0), 12),
+                                setHours(setMinutes(new Date(), 15), 12),
+                                setHours(setMinutes(new Date(), 30), 12),
+                                setHours(setMinutes(new Date(), 45), 12),
+                              ]}
                             />
                           </Modal.Body>
                           <Modal.Footer>

@@ -28,6 +28,7 @@ export interface day {
       timestamp: any
       uid: string
       total: number
+      craftBlock: string
     }
   ]
 }
@@ -83,6 +84,9 @@ const Table = ({ days }: day) => {
                           </div>
                           <div className="text-sm text-gray-500">
                             {day.email}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {day.craftBlock}
                           </div>
                         </div>
                       </div>
