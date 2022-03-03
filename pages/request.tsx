@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  setDoc,
   Timestamp,
 } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -24,6 +25,7 @@ const Request = () => {
   const [startDate, setStartDate] = useState<any>(new Date())
   const [endDate, setEndDate] = useState<any>(new Date())
   const [craftBlock, setCraftBlock] = useState<any>('')
+  const [reason, setReason] = useState<string>('')
   const [user] = useAuthState(auth)
   const [added, setAdded] = useState(false)
 
@@ -35,9 +37,6 @@ const Request = () => {
   }, [user])
 
   const handleSubmit = async () => {
-    const collectionRef = collection(db, user!.uid)
-    const collectionRefAll = collection(db, 'days')
-
     const name = user?.displayName
     const image = user?.photoURL
     const email = user?.email
@@ -45,6 +44,10 @@ const Request = () => {
     const time = timeBetween(startDate, endDate)
     const total = totalTime(time)
     craftBlock ? craftBlock : 'none'
+    const collectionRef = collection(db, user!.uid)
+    const collectionRefAll = collection(db, 'days')
+    const collectionRefBackup = collection(db, 'backup')
+    const date = Date.now()
 
     const payload = {
       name,
@@ -55,9 +58,11 @@ const Request = () => {
       uid,
       total,
       craftBlock,
+      reason,
     }
-    await addDoc(collectionRef, payload)
-    await addDoc(collectionRefAll, payload)
+    await setDoc(doc(collectionRef, `${date}`), payload)
+    await setDoc(doc(collectionRefAll, `${date}`), payload)
+    await setDoc(doc(collectionRefBackup, `${date}`), payload)
     setAdded(true)
     console.log(payload)
   }
@@ -65,53 +70,76 @@ const Request = () => {
   return (
     <div>
       <div className="flex flex-col justify-center items-center">
-        <div className=" h-96 w-96 text-black">
-          Start Date:
-          <DatePicker
-            id="startDate"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            showTimeSelect
-            timeFormat="h:mm aa"
-            timeIntervals={15}
-            timeCaption="time"
-            dateFormat="MM-dd-yy h:mm aa"
-            minTime={setHours(setMinutes(new Date(), 0), 7)}
-            maxTime={setHours(setMinutes(new Date(), 0), 17)}
-            filterDate={isWeekday}
-            inline
-            excludeTimes={[
-              setHours(setMinutes(new Date(), 0), 12),
-              setHours(setMinutes(new Date(), 15), 12),
-              setHours(setMinutes(new Date(), 30), 12),
-              setHours(setMinutes(new Date(), 45), 12),
-            ]}
-          />
-          End Date:
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            showTimeSelect
-            timeFormat="h:mm aa"
-            timeIntervals={15}
-            timeCaption="time"
-            dateFormat="MM-dd-yy h:mm aa"
-            minTime={setHours(setMinutes(new Date(), 0), 7)}
-            maxTime={setHours(setMinutes(new Date(), 0), 17)}
-            filterDate={isWeekday}
-            inline
-            excludeTimes={[
-              setHours(setMinutes(new Date(), 0), 12),
-              setHours(setMinutes(new Date(), 15), 12),
-              setHours(setMinutes(new Date(), 30), 12),
-              setHours(setMinutes(new Date(), 45), 12),
-            ]}
-          />
+        <div className=" h-full  justify-center items-center py-10 px-5 text-black flex flex-col  ">
+          <div className="flex flex-col p-3 w-[360px] md:w-full">
+            <h2 className="text-center">Start Date:</h2>
+            <DatePicker
+              id="startDate"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              showTimeSelect
+              timeFormat="h:mm aa"
+              timeIntervals={15}
+              timeCaption="time"
+              dateFormat="MM-dd-yy h:mm aa"
+              minTime={setHours(setMinutes(new Date(), 0), 7)}
+              maxTime={setHours(setMinutes(new Date(), 0), 17)}
+              filterDate={isWeekday}
+              inline
+              excludeTimes={[
+                setHours(setMinutes(new Date(), 0), 12),
+                setHours(setMinutes(new Date(), 15), 12),
+                setHours(setMinutes(new Date(), 30), 12),
+                setHours(setMinutes(new Date(), 45), 12),
+              ]}
+              className="w-3/4"
+            />
+          </div>
+          <div className="flex flex-col p-3 w-[360px] md:w-full ">
+            <h2 className="text-center">End Date:</h2>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              showTimeSelect
+              timeFormat="h:mm aa"
+              timeIntervals={15}
+              timeCaption="time"
+              dateFormat="MM-dd-yy h:mm aa"
+              minTime={setHours(setMinutes(new Date(), 0), 7)}
+              maxTime={setHours(setMinutes(new Date(), 0), 17)}
+              filterDate={isWeekday}
+              inline
+              excludeTimes={[
+                setHours(setMinutes(new Date(), 0), 12),
+                setHours(setMinutes(new Date(), 15), 12),
+                setHours(setMinutes(new Date(), 30), 12),
+                setHours(setMinutes(new Date(), 45), 12),
+              ]}
+              className="w-screen"
+            />
+          </div>
+          <div>
+            <form
+              className="flex flex-col justify-center items-center"
+              onChange={(e) => setReason((e.target as HTMLSelectElement).value)}
+            >
+              <label htmlFor="reason">Choose a reason:</label>
+              <select name="reasons" id="reason" className="text-center">
+                <option value="none">-</option>
+                <option value="Vacation/Personal">Vacation/Personal</option>
+                <option value="Sick Leave">Sick Leave</option>
+                <option value="Maternity/Paternity">Maternity/Paternity</option>
+                <option value="Bereavement">Bereavement</option>
+                <option value="Appointment">Appointment</option>
+                <option value="Covid">Covid</option>
+              </select>
+            </form>
+          </div>
         </div>
 
         <button
           type="submit"
-          className="p-2 my-5 mt-52 bg-yellow-500 rounded-md"
+          className="p-2 my-5 mt-10 bg-yellow-500 rounded-md"
           onClick={handleSubmit}
         >
           Submit

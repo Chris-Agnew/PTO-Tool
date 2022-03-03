@@ -14,7 +14,7 @@ const Footer = () => {
 
       <div className="flex -mx-2">
         <a
-          href="#"
+          href="https://www.facebook.com/AdvancedRVCLE/"
           className="mx-2 text-gray-600 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-300"
           aria-label="Facebook"
         >

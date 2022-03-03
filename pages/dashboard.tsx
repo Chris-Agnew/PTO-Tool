@@ -37,7 +37,6 @@ const Dashboard: NextPage = () => {
         }))
       )
     })
-    console.log('time off has been added')
     return unsubscribeAll
   }, [])
 

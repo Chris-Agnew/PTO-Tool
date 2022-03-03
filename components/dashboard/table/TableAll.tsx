@@ -29,6 +29,7 @@ export interface day {
       uid: string
       total: number
       craftBlock: string
+      reason: string
     }
   ]
 }
@@ -39,13 +40,13 @@ const Table = ({ days }: day) => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col justify-center items-center">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
+            <table className="min-w-full divide-y divide-gray-200 ">
+              {/* <thead className="bg-gray-50">
+                <tr className="hidden md:flex">
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -63,40 +64,41 @@ const Table = ({ days }: day) => {
                     <span className="sr-only">Edit</span>
                   </th>
                 </tr>
-              </thead>
+              </thead> */}
               <tbody className="bg-white divide-y divide-gray-200">
                 {days.map((day) => (
-                  <tr key={day.id}>
+                  <tr key={day.id} className="flex flex-col lg:flex-row">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
+                      <div className="flex items-center flex-col md:flex">
+                        <div className="flex-shrink-0 h-10 w-10 text-center flex justify-center items-center">
                           <Image
                             className="h-10 w-10 rounded-full"
                             src={day && day.image}
-                            height={50}
-                            width={50}
+                            height={100}
+                            width={100}
                             alt="employee image"
                           />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-gray-900 text-center py-3">
                             {day.name}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-gray-500 text-center">
                             {day.email}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-gray-500 text-center">
                             {day.craftBlock}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap flex flex-col justify-center items-center">
                       <div className="text-sm text-gray-900">
                         {/* // convert firestore timestamp to time and date */}
                         {`${formatDate(day.startDate.toDate())} -
                         ${formatDate(day.endDate.toDate())}`}
                       </div>
+                      <div>{day.reason}</div>
 
                       {/* <div>{() => timeOff(distance)}</div> */}
                     </td>

@@ -51,24 +51,24 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center pt-10">
+    <div className="flex flex-col justify-center items-center pt-10 mt-12">
       <Image
         src={user?.photoURL as string}
         width={200}
         height={200}
         alt="profile Photo"
-        className="rounded-full "
+        className="rounded-full  "
       />
 
       <h2 className="mt-5">Name: {user?.displayName}</h2>
       <h2>Email: {user?.email}</h2>
       <h2>Craftblock: {craftblockTitle}</h2>
       <form
-        className="my-10"
+        className="my-10 flex flex-col justify-center items-center"
         onChange={(e) => setCraftBlock((e.target as HTMLSelectElement).value)}
       >
         <label htmlFor="craftblocks">Choose a craftblock:</label>
-        <select name="craftblocks" id="craftblocks">
+        <select name="craftblocks" id="craftblocks" className="text-center">
           <option value="Suspension">Suspension</option>
           <option value="Pre-Cab">Pre-Cab</option>
           <option value="Electrical">Electrical</option>
@@ -92,7 +92,7 @@ const Profile = () => {
           <option value="Front Desk">Front Desk</option>
         </select>
         <button
-          className="p-5 my-5 ml-10 bg-yellow-500 rounded-md"
+          className="p-5 my-5 ml-10 bg-yellow-500 rounded-md text-center"
           onClick={updateCraft}
         >
           Update
