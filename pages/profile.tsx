@@ -51,7 +51,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center pt-10 mt-12">
+    <div className="flex flex-col justify-center items-center pt-10 mt-10">
       <Image
         src={user?.photoURL as string}
         width={200}
@@ -69,6 +69,7 @@ const Profile = () => {
       >
         <label htmlFor="craftblocks">Choose a craftblock:</label>
         <select name="craftblocks" id="craftblocks" className="text-center">
+          <option value="-">-</option>
           <option value="Suspension">Suspension</option>
           <option value="Pre-Cab">Pre-Cab</option>
           <option value="Electrical">Electrical</option>
