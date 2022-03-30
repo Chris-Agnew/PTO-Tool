@@ -16,6 +16,7 @@ type nav = {
 const navigation: Array<nav> = [
   { name: 'Dashboard', href: '/dashboard', current: false },
   { name: 'Time Off Request', href: '/request', current: false },
+  { name: '4 Day Work Week', href: '/workweek', current: false },
 ]
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
