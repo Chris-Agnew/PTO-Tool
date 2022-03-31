@@ -79,6 +79,7 @@ const Profile = () => {
           <option value="Accounting, Purchasing, and Finance">
             Accounting, Purchasing, and Finance
           </option>
+          <option value="Marketing">Marketing</option>
           <option value="Client Service">Client Service</option>
           <option value="B-Box">B-Box</option>
           <option value="Sewing & Upholstery">Sewing & Upholstery</option>
