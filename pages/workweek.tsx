@@ -6,11 +6,16 @@ import {
   serverTimestamp,
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth, db } from '../components/firebase/firebase'
+import { db } from '../components/firebase/firebase'
+
+interface User {
+  name: string
+  craftblock: string
+  day: string
+  uid: string
+}
 
 const Workweek = () => {
-  const [user] = useAuthState(auth)
   const [users, setUsers] = useState<any>([])
   useEffect(() => {
     const collectionRefAll = collection(db, 'users')
@@ -30,7 +35,7 @@ const Workweek = () => {
   }, [])
   console.log(users)
   return (
-    <div>
+    <div className="pt-24">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -48,7 +53,7 @@ const Workweek = () => {
           </thead>
           <tbody>
             {users &&
-              users.map((user: any) => (
+              users.map((user: User) => (
                 <tr
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                   key={user.uid}
