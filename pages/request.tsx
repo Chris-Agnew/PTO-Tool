@@ -29,8 +29,12 @@ export const getBusinessDatesCount = (startDate: Date, endDate: Date) => {
     if (dayOfWeek !== 0 && dayOfWeek !== 6) count++
     curDate.setDate(curDate.getDate() + 1)
   }
-  alert(count)
   return count
+}
+
+const getHours = (startDate: Date, endDate: Date) => {
+  const difference = endDate.getTime() - startDate.getTime()
+  return difference / 3600000
 }
 
 const Request = () => {
@@ -53,14 +57,13 @@ const Request = () => {
     const image = user?.photoURL
     const email = user?.email
     const uid = user?.uid
-    const time = timeBetween(startDate, endDate)
-    const total = totalTime(time)
     craftBlock ? craftBlock : 'none'
     const collectionRef = collection(db, user!.uid)
     const collectionRefAll = collection(db, 'days')
     const collectionRefBackup = collection(db, 'backup')
     const date = Date.now()
     const businessDatesCount = getBusinessDatesCount(startDate, endDate)
+    const hours = businessDatesCount * 8
 
     const payload = {
       name,
@@ -69,10 +72,10 @@ const Request = () => {
       startDate,
       endDate,
       uid,
-      total,
       craftBlock,
       reason,
       businessDatesCount,
+      hours,
     }
     await setDoc(doc(collectionRef, `${date}`), payload)
     await setDoc(doc(collectionRefAll, `${date}`), payload)
@@ -101,7 +104,6 @@ const Request = () => {
               filterDate={isWeekday}
               inline
               excludeTimes={[
-                setHours(setMinutes(new Date(), 0), 12),
                 setHours(setMinutes(new Date(), 15), 12),
                 setHours(setMinutes(new Date(), 30), 12),
                 setHours(setMinutes(new Date(), 45), 12),
@@ -124,7 +126,6 @@ const Request = () => {
               filterDate={isWeekday}
               inline
               excludeTimes={[
-                setHours(setMinutes(new Date(), 0), 12),
                 setHours(setMinutes(new Date(), 15), 12),
                 setHours(setMinutes(new Date(), 30), 12),
                 setHours(setMinutes(new Date(), 45), 12),
