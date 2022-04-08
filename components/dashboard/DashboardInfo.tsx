@@ -13,6 +13,7 @@ export interface MyItem {
   total: number
   image: string
   uid: string
+  businessDatesCount: number
 }
 
 export type MyItemList = [MyItem]
@@ -38,14 +39,28 @@ const DashboardInfo = ({ days }: day) => {
   const [user] = useAuthState(auth)
 
   //sum total time
-  const sumTotalTime = (time: MyItemList) => {
+  const sumTotalTime = (time: any) => {
     let total: number = 0
-    time.forEach((item) => {
-      user?.uid == item.uid ? (total += item.total) : (total += 0)
+    time.forEach((item: any) => {
+      console.log(item)
+      if (user?.uid == item.uid) {
+        total += item.businessDatesCount * 8
+      }
     })
     return total
   }
-
+  //sum total days
+  const sumTotalDays = (time: any) => {
+    let total: number = 0
+    time.forEach((item: any) => {
+      console.log(item)
+      if (user?.uid == item.uid) {
+        total += item.businessDatesCount
+      }
+    })
+    return total
+  }
+  console.log(currentUser)
   return (
     <div className="my-10 ">
       <h2 className="text-4xl my-10">Welcome {currentUser.displayName}</h2>
@@ -59,7 +74,7 @@ const DashboardInfo = ({ days }: day) => {
 
         <div className="p-4 sm:w-1/4 w-1/2">
           <h2 className="title-font font-medium sm:text-4xl text-3xl text-gray-900">
-            <CountUp end={sumTotalTime(days) / 8} duration={1} />
+            <CountUp end={sumTotalDays(days)} duration={1} />
           </h2>
           <p className="leading-relaxed">PTO days YTD</p>
         </div>

@@ -21,6 +21,18 @@ export const isWeekday = (date: any) => {
   return day !== 0 && day !== 6
 }
 
+export const getBusinessDatesCount = (startDate: Date, endDate: Date) => {
+  let count = 0
+  const curDate = new Date(startDate.getTime())
+  while (curDate <= endDate) {
+    const dayOfWeek = curDate.getDay()
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) count++
+    curDate.setDate(curDate.getDate() + 1)
+  }
+  alert(count)
+  return count
+}
+
 const Request = () => {
   const [startDate, setStartDate] = useState<any>(new Date())
   const [endDate, setEndDate] = useState<any>(new Date())
@@ -48,6 +60,7 @@ const Request = () => {
     const collectionRefAll = collection(db, 'days')
     const collectionRefBackup = collection(db, 'backup')
     const date = Date.now()
+    const businessDatesCount = getBusinessDatesCount(startDate, endDate)
 
     const payload = {
       name,
@@ -59,6 +72,7 @@ const Request = () => {
       total,
       craftBlock,
       reason,
+      businessDatesCount,
     }
     await setDoc(doc(collectionRef, `${date}`), payload)
     await setDoc(doc(collectionRefAll, `${date}`), payload)
