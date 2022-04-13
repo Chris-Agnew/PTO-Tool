@@ -11,7 +11,13 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../components/firebase/firebase'
 import { db } from '../components/firebase/firebase'
-import { format, getDay, setHours, setMinutes } from 'date-fns'
+import {
+  differenceInHours,
+  format,
+  getDay,
+  setHours,
+  setMinutes,
+} from 'date-fns'
 import { totalTime, timeBetween } from '../components/dashboard/DashboardInfo'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -32,18 +38,21 @@ export const getBusinessDatesCount = (startDate: Date, endDate: Date) => {
   return count
 }
 
-const getHours = (startDate: Date, endDate: Date) => {
-  const difference = endDate.getTime() - startDate.getTime()
-  return difference / 3600000
+//sum total hours and difference in hours
+const diffTotalHours = (endDate: Date, startDate: Date) => {
+  const difference = differenceInHours(endDate, startDate)
+  return difference
 }
 
 const Request = () => {
   const [startDate, setStartDate] = useState<any>(new Date())
   const [endDate, setEndDate] = useState<any>(new Date())
-  const [craftBlock, setCraftBlock] = useState<any>('')
+  const [craftBlock, setCraftBlock] = useState<string>('')
   const [reason, setReason] = useState<string>('')
   const [user] = useAuthState(auth)
   const [added, setAdded] = useState(false)
+  const [ptoHours, setPtoHours] = useState<number>(0)
+  const [days, setDays] = useState<number>(0)
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, 'users', user!.uid), (doc) => {
@@ -62,8 +71,20 @@ const Request = () => {
     const collectionRefAll = collection(db, 'days')
     const collectionRefBackup = collection(db, 'backup')
     const date = Date.now()
-    const businessDatesCount = getBusinessDatesCount(startDate, endDate)
-    const hours = businessDatesCount * 8
+
+    //check if partial day or full day then add to total hours or add days
+    const hoursOrDay = (startDate: Date, endDate: Date) => {
+      if (diffTotalHours(endDate, startDate) > 8) {
+        setDays(getBusinessDatesCount(startDate, endDate))
+      } else {
+        if (diffTotalHours(endDate, startDate) > 4) {
+          setPtoHours(diffTotalHours(endDate, startDate) - 1)
+        } else {
+          setPtoHours(diffTotalHours(endDate, startDate))
+        }
+      }
+    }
+    hoursOrDay(startDate, endDate)
 
     const payload = {
       name,
@@ -74,8 +95,8 @@ const Request = () => {
       uid,
       craftBlock,
       reason,
-      businessDatesCount,
-      hours,
+      ptoHours,
+      days,
     }
     await setDoc(doc(collectionRef, `${date}`), payload)
     await setDoc(doc(collectionRefAll, `${date}`), payload)

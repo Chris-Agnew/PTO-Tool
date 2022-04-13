@@ -3,6 +3,7 @@ import { day } from './table/Table'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../components/firebase/firebase'
 import CountUp from 'react-countup'
+import { differenceInHours } from 'date-fns'
 
 export interface MyItem {
   id: string
@@ -60,6 +61,12 @@ const DashboardInfo = ({ days }: day) => {
     })
     return total
   }
+  //sum total hours and difference in hours
+  const sumTotalHours = (endDate: Date, startDate: Date) => {
+    const difference = differenceInHours(endDate, startDate)
+    return difference
+  }
+
   console.log(currentUser)
   return (
     <div className="my-10 ">
