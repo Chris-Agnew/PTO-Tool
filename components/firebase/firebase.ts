@@ -11,17 +11,17 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCC2j4lpDYOEZMwIAsD6sWcWj9ziZr3xl0',
-  authDomain: 'arv-pto.firebaseapp.com',
-  projectId: 'arv-pto',
-  storageBucket: 'arv-pto.appspot.com',
-  messagingSenderId: '1096751400437',
-  appId: '1:1096751400437:web:a58cde33e940a9dd378cbc',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
-const db = getFirestore()
+const db = getFirestore(app)
 const provider = new GoogleAuthProvider()
 export { db, auth, provider }
 
